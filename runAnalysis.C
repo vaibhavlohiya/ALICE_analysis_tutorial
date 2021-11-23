@@ -3,6 +3,7 @@
 // specify includes for those. for your own task however, you (probably) have not generated a
 // pcm file, so we need to include it explicitly
 #include "AliAnalysisTaskMyTask.h"
+#include "AliAnalysisManager.h"
 
 void runAnalysis()
 {
@@ -31,6 +32,13 @@ void runAnalysis()
     // here we have to differentiate between using the just-in-time compiler
     // from root6, or the interpreter of root5
 #if !defined (__CINT__) || defined (__CLING__)
+    /*TMacro multSelection(gSystem->ExpandPathName("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C"));
+    AliMultSelectionTask* multSelectionTask = reinterpret_cast<AliMultSelectionTask*>(multSelection.Exec());*/
+
+    TMacro PIDadd(gSystem->ExpandPathName("$ALICE_ROOT/ANALYSIS/macros/AddTaskPIDResponse.C"));
+
+    AliAnalysisTaskPIDResponse* PIDresponseTask = reinterpret_cast<AliAnalysisTaskPIDResponse*>(PIDadd.Exec());
+    
     gInterpreter->LoadMacro("AliAnalysisTaskMyTask.cxx++g");
     AliAnalysisTaskMyTask *task = reinterpret_cast<AliAnalysisTaskMyTask*>(gInterpreter->ExecuteMacro("AddMyTask.C"));
 #else
@@ -47,11 +55,18 @@ void runAnalysis()
 
     if(local) {
         // if you want to run locally, we need to define some input
-        TChain* chain = new TChain("aodTree");
+        TChain* chainAOD = new TChain("aodTree");
         // add a few files to the chain (change this so that your local files are added)
-        chain->Add("AliAOD.root");
+        chainAOD->Add("/home/alidock/alice/AliAnalysisFiles/AliAOD2.root");
         // start the analysis locally, reading the events from the tchain
-        mgr->StartAnalysis("local", chain);
+        mgr->StartAnalysis("local", chainAOD);
+
+        //TChain* chainESD = new TChain("esdTree");
+
+        // chainESD->Add("AliESD.root");
+        
+        // mgr->StartAnalysis("local",chainESD);
+
     } else {
         // if we want to run on grid, we create and configure the plugin
         AliAnalysisAlien *alienHandler = new AliAnalysisAlien();

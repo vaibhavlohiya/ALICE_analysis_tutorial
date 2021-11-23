@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "AddMyTask.C": "cpp",
+        "runAnalysis.C": "cpp",
+        "AddTaskKStarPlusMinusRun2sp_bin.C": "cpp",
+        "ColourPalette.C": "cpp",
+        "Colz.C": "cpp"
+    }
+}

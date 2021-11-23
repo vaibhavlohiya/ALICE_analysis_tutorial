@@ -7,6 +7,18 @@
 
 #include "AliAnalysisTaskSE.h"
 
+class AliPIDResponse;
+class AliEventPoolManager;
+class AliVTrack;
+class AliEventPool;
+class AliMixedEvent;
+class AliAODTrack;
+class AliAODEvent;
+class TFile;
+class TList;
+class TH1F;
+class TH2F;
+
 class AliAnalysisTaskMyTask : public AliAnalysisTaskSE  
 {
     public:
@@ -19,9 +31,46 @@ class AliAnalysisTaskMyTask : public AliAnalysisTaskSE
         virtual void            Terminate(Option_t* option);
 
     private:
-        AliAODEvent*            fAOD;           //! input event
-        TList*                  fOutputList;    //! output list
-        TH1F*                   fHistPt;        //! dummy histogram
+
+        AliPIDResponse*         fPIDResponse;              //! pid response object
+        AliEventPoolManager*    fPoolmgr;                  //! pool manager for event mixing
+        AliEventPool*           pool;                      //! event pool
+        AliMixedEvent*          fAOD;                      //! input event
+        TList*                  fOutputAODList;            //! output list
+        TH2F*                   fHistPtbyPt;               //! dummy histogram
+        TFile*                  hidst;                     //! root file 
+    
+        //Kaon
+        TH1F*                   fHistPtKaon;               //! dummy histogram
+        TH1F*                   fHistEtaKaon;              //! dummy histogram
+        TH1F*                   fHistVertexKaon;           //! dummy histogram
+        TH1F*                   fHistPKaon;                //! dummy histogram
+        TH1F*                   fHistOneOverPtKaon;        //! 1/Pt
+        TH2F*                   fHistTPCKaon;              //! TPC Signal
+        
+
+        //Pion
+        TH1F*                   fHistPtPion;               //! dummy histogram
+        TH1F*                   fHistEtaPion;              //! dummy histogram
+        TH1F*                   fHistVertexPion;           //! dummy histogram
+        TH1F*                   fHistPPion;                //! dummy histogram
+        TH1F*                   fHistOneOverPtPion;        //! 1/Pt
+        TH2F*                   fHistTPCPion;              //! TPC Signal
+
+        //Proton
+        TH1F*                   fHistPtProton;             //! dummy histogram
+        TH1F*                   fHistEtaProton;            //! dummy histogram
+        TH1F*                   fHistVertexProton;         //! dummy histogram
+        TH1F*                   fHistPProton;              //! dummy histogram
+        TH1F*                   fHistOneOverPtProton;      //! 1/Pt
+        TH2F*                   fHistTPCProton;            //! TPC Signal
+
+        //Electron
+        TH2F*                   fHistTPCElectron;           //! TPC Signal
+        TH1F*                   fHistElectronCharge;        //! Charge of an electron
+
+        //Muon
+        TH2F*                   fHistTPCMuon;              //!TPC Signal
 
         AliAnalysisTaskMyTask(const AliAnalysisTaskMyTask&); // not implemented
         AliAnalysisTaskMyTask& operator=(const AliAnalysisTaskMyTask&); // not implemented
